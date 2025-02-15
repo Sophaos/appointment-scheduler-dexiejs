@@ -13,11 +13,12 @@ import { ResourceHeader } from "./resource-header";
 import { CalendarToolbar } from "./calendar-toolbar";
 import { Appointment, DEFAULT_APPOINTMENT, FormattedAppointment } from "features/appointments/appointment";
 import { useDispatch } from "react-redux";
-import { setAppointmentData, setAppointmentDrawerVisibility } from "features/appointments/appointment-slice";
 import { setIsMoving } from "./calendar-slice";
 import { Expert } from "features/experts/expert";
 import { getFormattedDate, getMinutesDifferences } from "shared/utils/time-utils";
 import { useSearchParams } from "react-router-dom";
+import { setAppointmentDrawerVisibility } from "layout/drawer-slice";
+import { setAppointmentData } from "features/appointments/appointment-slice";
 
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);

@@ -1,11 +1,12 @@
-import { selectExperts } from "features/experts/expert-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectResources, setResources } from "./calendar-slice";
 import { MultiSelect, MultiSelectChangeEvent } from "primereact/multiselect";
+import { useExpertQuery } from "features/experts/expert-query-hook";
 
 export const ResourceSelect = () => {
   const dispatch = useDispatch();
-  const resourcesOptions = useSelector(selectExperts);
+  const { items: resourcesOptions } = useExpertQuery();
+
   const resources = useSelector(selectResources);
 
   const handleChange = (event: MultiSelectChangeEvent) => {

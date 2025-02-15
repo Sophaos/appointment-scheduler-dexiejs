@@ -1,25 +1,15 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsClientDrawerVisible, setClientDrawerVisibility, useCreateClientMutation, useDeleteClientMutation, useUpdateClientMutation } from "./client-slice";
 import { ClientForm } from "./client-form";
 import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { Client } from "./client";
+import { useClientQuery } from "./client-query-hook";
 
-export const ClientDrawer = ({ data }: EntityDrawerProps<Client>) => {
-  const dispatch = useDispatch();
-  const isClientDrawerVisible = useSelector(selectIsClientDrawerVisible);
-  const handleHide = () => dispatch(setClientDrawerVisibility(false));
-
-  const [create, { isLoading: isCreating }] = useCreateClientMutation();
-  const [update, { isLoading: isUpdating }] = useUpdateClientMutation();
-  const [remove, { isLoading: isDeleting }] = useDeleteClientMutation();
-
-  const isProcessing = isCreating || isUpdating || isDeleting;
+export const ClientDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Client>) => {
+  const { update, create, remove } = useClientQuery();
 
   const handleUpdate = async (item: Client) => {
     try {
-      await update(item).unwrap();
-      handleHide();
+      await update(item);
     } catch (error) {
       console.error(error);
     }
@@ -27,8 +17,7 @@ export const ClientDrawer = ({ data }: EntityDrawerProps<Client>) => {
 
   const handleAdd = async (item: Client) => {
     try {
-      await create(item).unwrap();
-      handleHide();
+      await create(item);
     } catch (error) {
       console.error(error);
     }
@@ -36,8 +25,7 @@ export const ClientDrawer = ({ data }: EntityDrawerProps<Client>) => {
 
   const handleDelete = async () => {
     try {
-      await remove(data).unwrap();
-      handleHide();
+      await remove(data!.id);
     } catch (error) {
       console.error(error);
     }
@@ -49,8 +37,8 @@ export const ClientDrawer = ({ data }: EntityDrawerProps<Client>) => {
   };
 
   return (
-    <BaseDrawer isOpen={isClientDrawerVisible} title="Client" onHide={handleHide} icon={"pi pi-user-plus"}>
-      <ClientForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={isProcessing} onDelete={handleDelete} />
+    <BaseDrawer isOpen={isOpen} title="Client" onHide={handleHide} icon={"pi pi-user-plus"}>
+      <ClientForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={false} onDelete={handleDelete} />
     </BaseDrawer>
   );
 };

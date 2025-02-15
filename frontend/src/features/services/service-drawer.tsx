@@ -1,25 +1,15 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsServiceDrawerVisible, setServiceDrawerVisibility, useCreateServiceMutation, useDeleteServiceMutation, useUpdateServiceMutation } from "./service-slice";
 import { ServiceForm } from "./service-form";
 import { Service } from "./service";
 import { EntityDrawerProps } from "shared/types/entity-drawer-props";
+import { useServiceQuery } from "./service-query-hook";
 
-export const ServiceDrawer = ({ data }: EntityDrawerProps<Service>) => {
-  const dispatch = useDispatch();
-  const isServiceDrawerVisible = useSelector(selectIsServiceDrawerVisible);
-  const handleHide = () => dispatch(setServiceDrawerVisibility(false));
-
-  const [create, { isLoading: isCreating }] = useCreateServiceMutation();
-  const [update, { isLoading: isUpdating }] = useUpdateServiceMutation();
-  const [remove, { isLoading: isDeleting }] = useDeleteServiceMutation();
-
-  const isProcessing = isCreating || isUpdating || isDeleting;
+export const ServiceDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Service>) => {
+  const { update, create, remove } = useServiceQuery();
 
   const handleUpdate = async (item: Service) => {
     try {
-      await update(item).unwrap();
-      handleHide();
+      await update(item);
     } catch (error) {
       console.error(error);
     }
@@ -27,8 +17,7 @@ export const ServiceDrawer = ({ data }: EntityDrawerProps<Service>) => {
 
   const handleAdd = async (item: Service) => {
     try {
-      await create(item).unwrap();
-      handleHide();
+      await create(item);
     } catch (error) {
       console.error(error);
     }
@@ -36,8 +25,7 @@ export const ServiceDrawer = ({ data }: EntityDrawerProps<Service>) => {
 
   const handleDelete = async () => {
     try {
-      await remove(data).unwrap();
-      handleHide();
+      await remove(data!.id);
     } catch (error) {
       console.error(error);
     }
@@ -49,8 +37,8 @@ export const ServiceDrawer = ({ data }: EntityDrawerProps<Service>) => {
   };
 
   return (
-    <BaseDrawer isOpen={isServiceDrawerVisible} title="Service" onHide={handleHide}>
-      <ServiceForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={isProcessing} onDelete={handleDelete} />
+    <BaseDrawer isOpen={isOpen} title="Service" onHide={handleHide}>
+      <ServiceForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={false} onDelete={handleDelete} />
     </BaseDrawer>
   );
 };

@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^3.3.4",
     "@mui/icons-material": "^5.15.14",
     "@reduxjs/toolkit": "^2.2.1",
+    "dexie": "^4.0.11",
+    "dexie-react-hooks": "^1.1.7",
     "install": "^0.13.0",
     "npm": "^10.5.0",
     "primeicons": "^7.0.0",

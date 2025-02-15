@@ -1,27 +1,27 @@
 import { FormattedAppointment } from "features/appointments/appointment";
 import { AppointmentDrawer } from "features/appointments/appointment-drawer";
-import { useGetAppointmentsQuery } from "features/appointments/appointment-slice";
+import { useAppointmentQuery } from "features/appointments/appointment-query-hook";
 import { BaseCalendar } from "features/calendar/base-calendar";
 import { selectDisplayedResources } from "features/calendar/calendar-slice";
+import { CalendarSpeedDial } from "features/calendar/calendar-speed-dial";
 import { ClientDrawer } from "features/clients/client-drawer";
 import { ExpertDrawer } from "features/experts/expert-drawer";
-import { useGetExpertsQuery } from "features/experts/expert-slice";
 import { ServiceDrawer } from "features/services/service-drawer";
+import { useModal } from "hooks/drawer-hook";
+import { useRouter } from "hooks/router-hook";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
-import { getEndtime, getFormattedDate } from "shared/utils/time-utils";
+import { getEndtime } from "shared/utils/time-utils";
 
 export const AppointmentsPage = () => {
-  const [searchParams] = useSearchParams();
-  const view = searchParams.get("view") || "day";
-  const calendarDate = searchParams.get("date") || getFormattedDate(new Date());
+  const { view, date } = useRouter();
+  const { data: appointmentsData } = useAppointmentQuery({ view, date });
+  const { open: openClientDrawer, toggleModal: toggleClientModal } = useModal();
+  const { open: openServiceDrawer, toggleModal: toggleServiceModal } = useModal();
+  const { open: openExpertDrawer, toggleModal: toggleExpertModal } = useModal();
+  const { open: openAppointmentDrawer, toggleModal: toggleAppointmentModal } = useModal();
 
-  const { data: appointmentsData, error, isFetching: areAppointmentsFetching } = useGetAppointmentsQuery({ view: view === "agenda" ? "day" : view, date: calendarDate });
-  const { isFetching: areExpertFetching } = useGetExpertsQuery();
   const displayedResources = useSelector(selectDisplayedResources);
-
-  const isFetching = areAppointmentsFetching || areExpertFetching;
 
   const formatedAppointments: FormattedAppointment[] = useMemo(
     () =>
@@ -33,16 +33,14 @@ export const AppointmentsPage = () => {
     [appointmentsData]
   );
 
-  if (isFetching) return <div>Loading...</div>;
-  if (error) return <div>An error occured.</div>;
-
   return (
     <>
       <BaseCalendar data={appointmentsData ?? []} events={formatedAppointments} resources={displayedResources} />
-      <AppointmentDrawer />
-      <ClientDrawer />
-      <ServiceDrawer />
-      <ExpertDrawer />
+      <AppointmentDrawer isOpen={openAppointmentDrawer} handleHide={toggleAppointmentModal} />
+      <ClientDrawer isOpen={openClientDrawer} handleHide={toggleClientModal} />
+      <ServiceDrawer isOpen={openServiceDrawer} handleHide={toggleServiceModal} />
+      <ExpertDrawer isOpen={openExpertDrawer} handleHide={toggleExpertModal} />
+      <CalendarSpeedDial />
     </>
   );
 };

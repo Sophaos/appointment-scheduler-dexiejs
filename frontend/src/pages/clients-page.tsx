@@ -1,16 +1,12 @@
-import { Client, DEFAULT_CLIENT } from "features/clients/client";
+import { Client } from "features/clients/client";
 import { ClientDrawer } from "features/clients/client-drawer";
-import { setClientDrawerVisibility, useGetClientsQuery } from "features/clients/client-slice";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useClientQuery } from "features/clients/client-query-hook";
+import { useModal } from "hooks/drawer-hook";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
 
 export const ClientsPage = () => {
-  const dispatch = useDispatch();
-  const { data, error, isLoading } = useGetClientsQuery();
-
-  const [id, setId] = useState(0);
-  const item = id ? data?.find((i) => i.id === id) : DEFAULT_CLIENT;
+  const { items, item, setId } = useClientQuery();
+  const { open: openClientDrawer, toggleModal: toggleClientModal } = useModal();
 
   const columns: TableColumnProp[] = [
     { field: "nickname", header: "Nickname" },
@@ -22,16 +18,12 @@ export const ClientsPage = () => {
 
   const handleEdit = (row: Client) => {
     setId(row.id);
-    dispatch(setClientDrawerVisibility(true));
   };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error occured.</div>;
 
   return (
     <>
-      <BaseTable onEdit={handleEdit} data={data ?? []} columns={columns} />;
-      <ClientDrawer data={item} />
+      <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
+      <ClientDrawer data={item} isOpen={openClientDrawer} handleHide={toggleClientModal} />
     </>
   );
 };

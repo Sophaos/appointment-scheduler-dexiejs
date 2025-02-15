@@ -1,25 +1,15 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsExpertDrawerVisible, setExpertDrawerVisibility, useCreateExpertMutation, useDeleteExpertMutation, useUpdateExpertMutation } from "./expert-slice";
 import { ExpertForm } from "./expert-form";
 import { Expert } from "./expert";
 import { EntityDrawerProps } from "shared/types/entity-drawer-props";
+import { useExpertQuery } from "./expert-query-hook";
 
-export const ExpertDrawer = ({ data }: EntityDrawerProps<Expert>) => {
-  const dispatch = useDispatch();
-  const isExpertDrawerVisible = useSelector(selectIsExpertDrawerVisible);
-  const handleHide = () => dispatch(setExpertDrawerVisibility(false));
-
-  const [create, { isLoading: isCreating }] = useCreateExpertMutation();
-  const [update, { isLoading: isUpdating }] = useUpdateExpertMutation();
-  const [remove, { isLoading: isDeleting }] = useDeleteExpertMutation();
-
-  const isProcessing = isCreating || isUpdating || isDeleting;
+export const ExpertDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Expert>) => {
+  const { update, create, remove } = useExpertQuery();
 
   const handleUpdate = async (item: Expert) => {
     try {
-      await update(item).unwrap();
-      handleHide();
+      await update(item);
     } catch (error) {
       console.error(error);
     }
@@ -27,8 +17,7 @@ export const ExpertDrawer = ({ data }: EntityDrawerProps<Expert>) => {
 
   const handleAdd = async (item: Expert) => {
     try {
-      await create(item).unwrap();
-      handleHide();
+      await create(item);
     } catch (error) {
       console.error(error);
     }
@@ -41,16 +30,15 @@ export const ExpertDrawer = ({ data }: EntityDrawerProps<Expert>) => {
 
   const handleDelete = async () => {
     try {
-      await remove(data).unwrap();
-      handleHide();
+      await remove(data!.id);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <BaseDrawer isOpen={isExpertDrawerVisible} title="Expert" onHide={handleHide}>
-      <ExpertForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={isProcessing} onDelete={handleDelete} />
+    <BaseDrawer isOpen={isOpen} title="Expert" onHide={handleHide}>
+      <ExpertForm onCancel={handleHide} onConfirm={handleConfirm} data={data} isProcessing={false} onDelete={handleDelete} />
     </BaseDrawer>
   );
 };

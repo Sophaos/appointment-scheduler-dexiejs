@@ -4,10 +4,6 @@ import { BaseFormProps } from "shared/types/base-form-props";
 import { FormattedAppointment } from "./appointment";
 import { FormActions } from "shared/ui/form-actions";
 import { DropdownChangeEvent } from "primereact/dropdown";
-import { useSelector } from "react-redux";
-import { selectClients } from "features/clients/client-slice";
-import { selectServices } from "features/services/service-slice";
-import { selectExperts } from "features/experts/expert-slice";
 import { EntityOption } from "shared/types/entity-option";
 import { FormInputText } from "shared/ui/form-input-text";
 import { FormSelectButton } from "shared/ui/form-select-button";
@@ -15,6 +11,9 @@ import { FormCalendar } from "shared/ui/form-calendar";
 import { FormInputNumber } from "shared/ui/form-input-number";
 import { FormDropdown } from "shared/ui/form-dropdown";
 import { AppointmentSchema } from "./appointment-schema";
+import { useClientQuery } from "features/clients/client-query-hook";
+import { useExpertQuery } from "features/experts/expert-query-hook";
+import { useServiceQuery } from "features/services/service-query-hook";
 
 const STATUS_OPTIONS: EntityOption[] = [
   { id: "IDLE", label: "Idle" },
@@ -36,9 +35,9 @@ export const AppointmentForm = ({ onCancel, onConfirm, data, isProcessing, isEna
     defaultValues: data,
   });
 
-  const clientOptions = useSelector(selectClients);
-  const serviceOptions = useSelector(selectServices);
-  const expertOptions = useSelector(selectExperts);
+  const { items: clientOptions } = useClientQuery();
+  const { items: expertOptions } = useExpertQuery();
+  const { items: serviceOptions } = useServiceQuery();
 
   const onSubmit = (formData: FormattedAppointment) => {
     onConfirm(formData);

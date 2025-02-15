@@ -6,7 +6,6 @@ export interface Client {
   lastName: string;
   email: string;
   note: string;
-  // appointmentIds: number[];
 }
 
 export const DEFAULT_CLIENT: Client = {
@@ -17,5 +16,4 @@ export const DEFAULT_CLIENT: Client = {
   lastName: "",
   email: "",
   note: "",
-  // appointmentIds: [],
 };
