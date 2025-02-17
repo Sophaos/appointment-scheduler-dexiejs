@@ -4,7 +4,7 @@ import { Client, DEFAULT_CLIENT } from "./client";
 import { useState } from "react";
 export const useClientQuery = () => {
   const [id, setId] = useState(0);
-  const items = useLiveQuery(() => schedulerDatabase.clients.toArray()) ?? [];
+  const items = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_CLIENT;
 
   const update = async (item: Client) => {

@@ -12,13 +12,10 @@ import { AgendaEvent } from "./agenda-event";
 import { ResourceHeader } from "./resource-header";
 import { CalendarToolbar } from "./calendar-toolbar";
 import { Appointment, DEFAULT_APPOINTMENT, FormattedAppointment } from "features/appointments/appointment";
-import { useDispatch } from "react-redux";
-import { setIsMoving } from "./calendar-slice";
+
 import { Expert } from "features/experts/expert";
 import { getFormattedDate, getMinutesDifferences } from "shared/utils/time-utils";
 import { useSearchParams } from "react-router-dom";
-import { setAppointmentDrawerVisibility } from "layout/drawer-slice";
-import { setAppointmentData } from "features/appointments/appointment-slice";
 
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
@@ -31,7 +28,7 @@ export interface BaseCalendarProps {
 }
 
 export const BaseCalendar = ({ events, data, resources }: BaseCalendarProps) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const view = (searchParams.get("view") || "day") as View;
 
@@ -162,11 +159,11 @@ export const BaseCalendar = ({ events, data, resources }: BaseCalendarProps) => 
   const handleEventResize = useCallback(
     (event: any) => {
       const selectedEvent = data.find((item) => item.id === event.event.id);
-      dispatch(setAppointmentDrawerVisibility(true));
-      dispatch(setAppointmentData({ ...selectedEvent, startTime: event.start.toISOString(), duration: getMinutesDifferences(event.start, event.end) }));
-      dispatch(setIsMoving(true));
+      // dispatch(setAppointmentDrawerVisibility(true));
+      // dispatch(setAppointmentData({ ...selectedEvent, startTime: event.start.toISOString(), duration: getMinutesDifferences(event.start, event.end) }));
+      // dispatch(setIsMoving(true));
     },
-    [dispatch, data]
+    [data]
   );
 
   const handleEventDrop = useCallback(
@@ -174,36 +171,36 @@ export const BaseCalendar = ({ events, data, resources }: BaseCalendarProps) => 
       const { start, end, event, resourceId } = e;
       const selectedEvent = data.find((item) => item.id === event.id);
       const resource = resources?.find((item) => item.id === resourceId);
-      dispatch(setAppointmentDrawerVisibility(true));
-      dispatch(setAppointmentData({ ...selectedEvent, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource ?? selectedEvent?.expert }));
-      dispatch(setIsMoving(true));
+      // dispatch(setAppointmentDrawerVisibility(true));
+      // dispatch(setAppointmentData({ ...selectedEvent, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource ?? selectedEvent?.expert }));
+      // dispatch(setIsMoving(true));
     },
-    [data, resources, dispatch]
+    [data, resources]
   );
 
   const handleSelectSlot = useCallback(
     (event: SlotInfo) => {
       const { start, end, resourceId } = event;
       const resource = resources?.find((item) => item.id === resourceId) ?? undefined;
-      dispatch(setAppointmentDrawerVisibility(true));
+      // dispatch(setAppointmentDrawerVisibility(true));
       const duration = getMinutesDifferences(start, end);
       if (duration === OUT_OF_BOUND_DURATION) {
         start.setHours(10);
-        dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), expert: resource }));
+        // dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), expert: resource }));
       } else {
-        dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource }));
+        // dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource }));
       }
     },
-    [dispatch, resources]
+    [resources]
   );
 
   const handleSelectEvent = useCallback(
     (event: any) => {
       const selectedEvent = data.find((item) => item.id === event.id) ?? DEFAULT_APPOINTMENT;
-      dispatch(setAppointmentDrawerVisibility(true));
-      dispatch(setAppointmentData({ ...selectedEvent }));
+      // dispatch(setAppointmentDrawerVisibility(true));
+      // dispatch(setAppointmentData({ ...selectedEvent }));
     },
-    [dispatch, data]
+    [data]
   );
 
   const min = useMemo(() => new Date(1972, 0, 1, 9, 0, 0, 0), []);

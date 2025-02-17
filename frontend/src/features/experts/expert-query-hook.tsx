@@ -4,7 +4,7 @@ import { DEFAULT_EXPERT, Expert } from "./expert";
 import { useState } from "react";
 export const useExpertQuery = () => {
   const [id, setId] = useState(0);
-  const items = useLiveQuery(() => schedulerDatabase.experts.toArray()) ?? [];
+  const items = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_EXPERT;
 
   const update = async (item: Expert) => {

@@ -8,7 +8,7 @@ interface AppointmentQueryProps {
 }
 
 export const useAppointmentQuery = ({ view, date }: AppointmentQueryProps) => {
-  const data = useLiveQuery(() => schedulerDatabase.appointments.toArray(), [view, date]);
+  const data = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
 
   const update = async (item: Appointment) => {
     try {

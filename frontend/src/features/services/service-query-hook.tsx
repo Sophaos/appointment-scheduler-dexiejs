@@ -4,7 +4,7 @@ import { DEFAULT_SERVICE, Service } from "./service";
 import { useState } from "react";
 export const useServiceQuery = () => {
   const [id, setId] = useState(0);
-  const items = useLiveQuery(() => schedulerDatabase.services.toArray()) ?? [];
+  const items = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_SERVICE;
   const update = async (item: Service) => {
     try {
