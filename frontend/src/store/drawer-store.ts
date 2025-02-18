@@ -9,6 +9,10 @@ interface DrawerState {
   setAppointmentDrawerVisibility: (isVisible: boolean) => void;
   setExpertDrawerVisibility: (isVisible: boolean) => void;
   setServiceDrawerVisibility: (isVisible: boolean) => void;
+  toggleClientDrawerVisibility: () => void;
+  toggleAppointmentDrawerVisibility: () => void;
+  toggleExpertDrawerVisibility: () => void;
+  toggleServiceDrawerVisibility: () => void;
 }
 
 export const useDrawerStore = create<DrawerState>()((set) => ({
@@ -20,4 +24,8 @@ export const useDrawerStore = create<DrawerState>()((set) => ({
   setAppointmentDrawerVisibility: (isVisible) => set({ isAppointmentDrawerVisible: isVisible }),
   setExpertDrawerVisibility: (isVisible) => set({ isExpertDrawerVisible: isVisible }),
   setServiceDrawerVisibility: (isVisible) => set({ isServiceDrawerVisible: isVisible }),
+  toggleClientDrawerVisibility: () => set((state) => ({ isClientDrawerVisible: !state.isClientDrawerVisible })),
+  toggleAppointmentDrawerVisibility: () => set((state) => ({ isAppointmentDrawerVisible: !state.isAppointmentDrawerVisible })),
+  toggleExpertDrawerVisibility: () => set((state) => ({ isExpertDrawerVisible: !state.isExpertDrawerVisible })),
+  toggleServiceDrawerVisibility: () => set((state) => ({ isServiceDrawerVisible: !state.isServiceDrawerVisible })),
 }));
