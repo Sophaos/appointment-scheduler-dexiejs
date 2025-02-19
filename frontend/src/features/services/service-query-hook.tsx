@@ -6,6 +6,7 @@ export const useServiceQuery = () => {
   const [id, setId] = useState(0);
   const items = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_SERVICE;
+  console.log(item, id);
   const update = async (item: Service) => {
     try {
       await schedulerDatabase.services.update(item.id, item);

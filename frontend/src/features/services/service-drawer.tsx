@@ -4,8 +4,8 @@ import { Service } from "./service";
 import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { useServiceQuery } from "./service-query-hook";
 
-export const ServiceDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Service>) => {
-  const { update, create, remove } = useServiceQuery();
+export const ServiceDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Service>) => {
+  const { item: data, update, create, remove } = useServiceQuery();
 
   const handleUpdate = async (item: Service) => {
     try {

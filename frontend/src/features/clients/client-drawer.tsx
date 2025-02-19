@@ -4,8 +4,8 @@ import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { Client } from "./client";
 import { useClientQuery } from "./client-query-hook";
 
-export const ClientDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Client>) => {
-  const { update, create, remove } = useClientQuery();
+export const ClientDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Client>) => {
+  const { item: data, update, create, remove } = useClientQuery();
 
   const handleUpdate = async (item: Client) => {
     try {

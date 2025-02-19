@@ -4,8 +4,8 @@ import { Expert } from "./expert";
 import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { useExpertQuery } from "./expert-query-hook";
 
-export const ExpertDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Expert>) => {
-  const { update, create, remove } = useExpertQuery();
+export const ExpertDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Expert>) => {
+  const { item: data, update, create, remove } = useExpertQuery();
 
   const handleUpdate = async (item: Expert) => {
     try {
