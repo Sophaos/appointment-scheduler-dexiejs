@@ -1,16 +1,11 @@
 import { Client } from "features/clients/client";
 import { useClientQuery } from "features/clients/client-query-hook";
+import { useClientStore } from "features/clients/client-store";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
-import { useDrawerStore } from "store/drawer-store";
-import { useShallow } from "zustand/shallow";
 
 export const ClientsPage = () => {
   const { items, setId } = useClientQuery();
-  const { toggleClientDrawerVisibility } = useDrawerStore(
-    useShallow((state) => ({
-      toggleClientDrawerVisibility: state.toggleClientDrawerVisibility,
-    }))
-  );
+  const toggleClientDrawerVisibility = useClientStore((state) => state.toggleClientDrawerVisibility);
 
   const columns: TableColumnProp[] = [
     { field: "nickname", header: "Nickname" },

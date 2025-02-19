@@ -1,11 +1,13 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
 import { ExpertForm } from "./expert-form";
 import { Expert } from "./expert";
-import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { useExpertQuery } from "./expert-query-hook";
+import { useExpertStore } from "./expert-store";
 
-export const ExpertDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Expert>) => {
+export const ExpertDrawer = () => {
   const { item: data, update, create, remove } = useExpertQuery();
+  const isOpen = useExpertStore((state) => state.isExpertDrawerVisible);
+  const handleHide = useExpertStore((state) => state.toggleExpertDrawerVisibility);
 
   const handleUpdate = async (item: Expert) => {
     try {

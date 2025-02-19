@@ -1,11 +1,13 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
 import { ClientForm } from "./client-form";
-import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { Client } from "./client";
 import { useClientQuery } from "./client-query-hook";
+import { useClientStore } from "./client-store";
 
-export const ClientDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Client>) => {
+export const ClientDrawer = () => {
   const { item: data, update, create, remove } = useClientQuery();
+  const isOpen = useClientStore((state) => state.isClientDrawerVisible);
+  const handleHide = useClientStore((state) => state.toggleClientDrawerVisibility);
 
   const handleUpdate = async (item: Client) => {
     try {

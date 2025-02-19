@@ -1,11 +1,13 @@
 import { BaseDrawer } from "shared/ui/base-drawer";
 import { ServiceForm } from "./service-form";
 import { Service } from "./service";
-import { EntityDrawerProps } from "shared/types/entity-drawer-props";
 import { useServiceQuery } from "./service-query-hook";
+import { useServiceStore } from "./service-store";
 
-export const ServiceDrawer = ({ handleHide, isOpen }: EntityDrawerProps<Service>) => {
+export const ServiceDrawer = () => {
   const { item: data, update, create, remove } = useServiceQuery();
+  const isOpen = useServiceStore((state) => state.isServiceDrawerVisible);
+  const handleHide = useServiceStore((state) => state.toggleServiceDrawerVisibility);
 
   const handleUpdate = async (item: Service) => {
     try {

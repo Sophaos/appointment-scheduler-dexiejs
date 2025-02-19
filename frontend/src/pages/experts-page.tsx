@@ -1,16 +1,11 @@
 import { Expert } from "features/experts/expert";
 import { useExpertQuery } from "features/experts/expert-query-hook";
+import { useExpertStore } from "features/experts/expert-store";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
-import { useDrawerStore } from "store/drawer-store";
-import { useShallow } from "zustand/shallow";
 
 export const ExpertsPage = () => {
   const { items, setId } = useExpertQuery();
-  const { toggleExpertDrawerVisibility } = useDrawerStore(
-    useShallow((state) => ({
-      toggleExpertDrawerVisibility: state.toggleExpertDrawerVisibility,
-    }))
-  );
+  const toggleExpertDrawerVisibility = useExpertStore((state) => state.toggleExpertDrawerVisibility);
 
   const columns: TableColumnProp[] = [
     { field: "nickname", header: "Nickanme" },

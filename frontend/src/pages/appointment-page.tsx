@@ -1,7 +1,6 @@
 import { FormattedAppointment } from "features/appointments/appointment";
 import { useAppointmentQuery } from "features/appointments/appointment-query-hook";
 import { BaseCalendar } from "features/calendar/base-calendar";
-import { AddSpeedDial } from "layout/add-speed-dial";
 import { useRouter } from "hooks/router-hook";
 import { useMemo } from "react";
 import { getEndtime } from "shared/utils/time-utils";
@@ -22,10 +21,5 @@ export const AppointmentsPage = () => {
     [appointmentsData]
   );
 
-  return (
-    <>
-      <BaseCalendar data={appointmentsData ?? []} events={formatedAppointments} resources={undefined} />
-      <AddSpeedDial />
-    </>
-  );
+  return <BaseCalendar data={appointmentsData ?? []} events={formatedAppointments} resources={undefined} />;
 };

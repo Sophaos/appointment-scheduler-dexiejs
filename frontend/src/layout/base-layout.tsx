@@ -4,45 +4,20 @@ import { ClientDrawer } from "features/clients/client-drawer";
 import { ServiceDrawer } from "features/services/service-drawer";
 import { ExpertDrawer } from "features/experts/expert-drawer";
 import { AddSpeedDial } from "layout/add-speed-dial";
-import { useDrawerStore } from "store/drawer-store";
-import { useShallow } from "zustand/shallow";
 import { ReactNode } from "react";
-
 interface BaseLayoutProps {
   children: ReactNode;
 }
 
 export const BaseLayout = ({ children }: BaseLayoutProps) => {
-  const {
-    isClientDrawerVisible,
-    isAppointmentDrawerVisible,
-    isExpertDrawerVisible,
-    isServiceDrawerVisible,
-    toggleAppointmentDrawerVisibility,
-    toggleClientDrawerVisibility,
-    toggleServiceDrawerVisibility,
-    toggleExpertDrawerVisibility,
-  } = useDrawerStore(
-    useShallow((state) => ({
-      isClientDrawerVisible: state.isClientDrawerVisible,
-      isAppointmentDrawerVisible: state.isAppointmentDrawerVisible,
-      isExpertDrawerVisible: state.isExpertDrawerVisible,
-      isServiceDrawerVisible: state.isServiceDrawerVisible,
-      toggleAppointmentDrawerVisibility: state.toggleAppointmentDrawerVisibility,
-      toggleClientDrawerVisibility: state.toggleClientDrawerVisibility,
-      toggleServiceDrawerVisibility: state.toggleServiceDrawerVisibility,
-      toggleExpertDrawerVisibility: state.toggleExpertDrawerVisibility,
-    }))
-  );
-
   return (
     <>
       <BaseToolbar />
       {children}
-      <AppointmentDrawer isOpen={isAppointmentDrawerVisible} handleHide={toggleAppointmentDrawerVisibility} />
-      <ClientDrawer isOpen={isClientDrawerVisible} handleHide={toggleClientDrawerVisibility} />
-      <ServiceDrawer isOpen={isServiceDrawerVisible} handleHide={toggleServiceDrawerVisibility} />
-      <ExpertDrawer isOpen={isExpertDrawerVisible} handleHide={toggleExpertDrawerVisibility} />
+      <AppointmentDrawer />
+      <ClientDrawer />
+      <ServiceDrawer />
+      <ExpertDrawer />
       <AddSpeedDial />
     </>
   );

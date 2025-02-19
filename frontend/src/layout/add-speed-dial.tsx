@@ -3,18 +3,16 @@ import { SpeedDial } from "primereact/speeddial";
 import { Tooltip } from "primereact/tooltip";
 import { Toast } from "primereact/toast";
 import { MenuItem } from "primereact/menuitem";
-import { useDrawerStore } from "store/drawer-store";
-import { useShallow } from "zustand/shallow";
+import { useClientStore } from "features/clients/client-store";
+import { useAppointmentStore } from "features/appointments/appointment-store";
+import { useExpertStore } from "features/experts/expert-store";
+import { useServiceStore } from "features/services/service-store";
 
 export const AddSpeedDial = () => {
-  const { setClientDrawerVisibility, setAppointmentDrawerVisibility, setExpertDrawerVisibility, setServiceDrawerVisibility } = useDrawerStore(
-    useShallow((state) => ({
-      setClientDrawerVisibility: state.setClientDrawerVisibility,
-      setAppointmentDrawerVisibility: state.setAppointmentDrawerVisibility,
-      setExpertDrawerVisibility: state.setExpertDrawerVisibility,
-      setServiceDrawerVisibility: state.setServiceDrawerVisibility,
-    }))
-  );
+  const setClientDrawerVisibility = useClientStore((state) => state.setClientDrawerVisibility);
+  const setAppointmentDrawerVisibility = useAppointmentStore((state) => state.setAppointmentDrawerVisibility);
+  const setExpertDrawerVisibility = useExpertStore((state) => state.setExpertDrawerVisibility);
+  const setServiceDrawerVisibility = useServiceStore((state) => state.setServiceDrawerVisibility);
 
   const toast = useRef<Toast>(null);
   const items: MenuItem[] = [

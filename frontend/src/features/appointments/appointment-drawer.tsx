@@ -3,11 +3,14 @@ import { AppointmentForm } from "./appointment-form";
 import { Appointment, DEFAULT_APPOINTMENT, FormattedAppointment } from "./appointment";
 import { useAppointmentQuery } from "./appointment-query-hook";
 import { useRouter } from "hooks/router-hook";
-import { EntityDrawerProps } from "shared/types/entity-drawer-props";
+import { useAppointmentStore } from "./appointment-store";
 
-export const AppointmentDrawer = ({ data, handleHide, isOpen }: EntityDrawerProps<Appointment>) => {
+export const AppointmentDrawer = () => {
   // const dispatch = useDispatch();
+  const data = DEFAULT_APPOINTMENT; // TODO remove
   const { view, date } = useRouter();
+  const isOpen = useAppointmentStore((state) => state.isAppointmentDrawerVisible);
+  const handleHide = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
   // const isDrawerVisible = useSelector(selectIsAppointmentDrawerVisible);
   // const isMoving = useSelector(selectIsMoving);
   // const data = useSelector(selectAppointmentData);
