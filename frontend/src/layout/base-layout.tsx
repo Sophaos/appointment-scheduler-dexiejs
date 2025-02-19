@@ -1,5 +1,4 @@
 import { BaseToolbar } from "./base-toolbar";
-import { useModal } from "hooks/drawer-hook";
 import { AppointmentDrawer } from "features/appointments/appointment-drawer";
 import { ClientDrawer } from "features/clients/client-drawer";
 import { ServiceDrawer } from "features/services/service-drawer";
@@ -7,8 +6,13 @@ import { ExpertDrawer } from "features/experts/expert-drawer";
 import { AddSpeedDial } from "layout/add-speed-dial";
 import { useDrawerStore } from "store/drawer-store";
 import { useShallow } from "zustand/shallow";
+import { ReactNode } from "react";
 
-export const BaseLayout = ({ children }) => {
+interface BaseLayoutProps {
+  children: ReactNode;
+}
+
+export const BaseLayout = ({ children }: BaseLayoutProps) => {
   const {
     isClientDrawerVisible,
     isAppointmentDrawerVisible,
@@ -30,6 +34,7 @@ export const BaseLayout = ({ children }) => {
       toggleExpertDrawerVisibility: state.toggleExpertDrawerVisibility,
     }))
   );
+
   return (
     <>
       <BaseToolbar />

@@ -17,7 +17,7 @@ export const useClientQuery = () => {
 
   const create = async (item: Client) => {
     try {
-      await schedulerDatabase.clients.add(item);
+      await schedulerDatabase.clients.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
     }

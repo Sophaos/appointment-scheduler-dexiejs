@@ -1,12 +1,16 @@
 import { Client } from "features/clients/client";
-import { ClientDrawer } from "features/clients/client-drawer";
 import { useClientQuery } from "features/clients/client-query-hook";
-import { useModal } from "hooks/drawer-hook";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
+import { useDrawerStore } from "store/drawer-store";
+import { useShallow } from "zustand/shallow";
 
 export const ClientsPage = () => {
-  const { items, item, setId } = useClientQuery();
-  const { open: openClientDrawer, toggleModal: toggleClientModal } = useModal();
+  const { items, setId } = useClientQuery();
+  const { toggleClientDrawerVisibility } = useDrawerStore(
+    useShallow((state) => ({
+      toggleClientDrawerVisibility: state.toggleClientDrawerVisibility,
+    }))
+  );
 
   const columns: TableColumnProp[] = [
     { field: "nickname", header: "Nickname" },
@@ -18,12 +22,8 @@ export const ClientsPage = () => {
 
   const handleEdit = (row: Client) => {
     setId(row.id);
+    toggleClientDrawerVisibility();
   };
 
-  return (
-    <>
-      <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
-      <ClientDrawer data={item} isOpen={openClientDrawer} handleHide={toggleClientModal} />
-    </>
-  );
+  return <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
 };

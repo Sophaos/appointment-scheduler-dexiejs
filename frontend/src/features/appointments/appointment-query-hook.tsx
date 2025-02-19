@@ -20,7 +20,7 @@ export const useAppointmentQuery = ({ view, date }: AppointmentQueryProps) => {
 
   const create = async (item: Appointment) => {
     try {
-      await schedulerDatabase.appointments.add(item);
+      await schedulerDatabase.appointments.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
     }

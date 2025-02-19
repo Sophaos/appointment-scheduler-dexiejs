@@ -16,7 +16,7 @@ export const useServiceQuery = () => {
 
   const create = async (item: Service) => {
     try {
-      await schedulerDatabase.services.add(item);
+      await schedulerDatabase.services.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
     }

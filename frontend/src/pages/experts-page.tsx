@@ -1,12 +1,17 @@
 import { Expert } from "features/experts/expert";
-import { ExpertDrawer } from "features/experts/expert-drawer";
 import { useExpertQuery } from "features/experts/expert-query-hook";
-import { useModal } from "hooks/drawer-hook";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
+import { useDrawerStore } from "store/drawer-store";
+import { useShallow } from "zustand/shallow";
 
 export const ExpertsPage = () => {
-  const { items, item, setId } = useExpertQuery();
-  const { open: openExpertDrawer, toggleModal: toggleExpertModal } = useModal();
+  const { items, setId } = useExpertQuery();
+  const { toggleExpertDrawerVisibility } = useDrawerStore(
+    useShallow((state) => ({
+      toggleExpertDrawerVisibility: state.toggleExpertDrawerVisibility,
+    }))
+  );
+
   const columns: TableColumnProp[] = [
     { field: "nickname", header: "Nickanme" },
     { field: "color", header: "Color" },
@@ -14,12 +19,8 @@ export const ExpertsPage = () => {
 
   const handleEdit = (row: Expert) => {
     setId(row.id);
+    toggleExpertDrawerVisibility();
   };
 
-  return (
-    <>
-      <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
-      <ExpertDrawer data={item} isOpen={openExpertDrawer} handleHide={toggleExpertModal} />
-    </>
-  );
+  return <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
 };

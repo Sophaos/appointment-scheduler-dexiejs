@@ -17,7 +17,7 @@ export const useExpertQuery = () => {
 
   const create = async (item: Expert) => {
     try {
-      await schedulerDatabase.experts.add(item);
+      await schedulerDatabase.experts.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
     }

@@ -1,12 +1,16 @@
 import { Service } from "features/services/service";
-import { ServiceDrawer } from "features/services/service-drawer";
 import { useServiceQuery } from "features/services/service-query-hook";
-import { useModal } from "hooks/drawer-hook";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
+import { useDrawerStore } from "store/drawer-store";
+import { useShallow } from "zustand/shallow";
 
 export const ServicesPage = () => {
-  const { items, item, setId } = useServiceQuery();
-  const { open: openServiceDrawer, toggleModal: toggleServiceModal } = useModal();
+  const { items, setId } = useServiceQuery();
+  const { toggleServiceDrawerVisibility } = useDrawerStore(
+    useShallow((state) => ({
+      toggleServiceDrawerVisibility: state.toggleServiceDrawerVisibility,
+    }))
+  );
 
   const columns: TableColumnProp[] = [
     { field: "name", header: "Name" },
@@ -16,12 +20,8 @@ export const ServicesPage = () => {
 
   const handleEdit = (row: Service) => {
     setId(row.id);
+    toggleServiceDrawerVisibility();
   };
 
-  return (
-    <>
-      <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
-      <ServiceDrawer data={item} isOpen={openServiceDrawer} handleHide={toggleServiceModal} />
-    </>
-  );
+  return <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
 };
