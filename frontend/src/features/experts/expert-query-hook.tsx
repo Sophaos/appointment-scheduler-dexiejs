@@ -1,9 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { schedulerDatabase } from "db/db";
 import { DEFAULT_EXPERT, Expert } from "./expert";
-import { useState } from "react";
+import { useExpertStore } from "./expert-store";
 export const useExpertQuery = () => {
-  const [id, setId] = useState(0);
+  const id = useExpertStore((state) => state.id);
+  const setId = useExpertStore((state) => state.setId);
   const items = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_EXPERT;
 
@@ -25,7 +26,7 @@ export const useExpertQuery = () => {
 
   const remove = async (id: number) => {
     try {
-      await schedulerDatabase.appointments.delete(id);
+      await schedulerDatabase.experts.delete(id);
     } catch (error) {
       console.error(error);
     }

@@ -1,9 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { schedulerDatabase } from "db/db";
 import { Client, DEFAULT_CLIENT } from "./client";
-import { useState } from "react";
+import { useClientStore } from "./client-store";
 export const useClientQuery = () => {
-  const [id, setId] = useState(0);
+  const id = useClientStore((state) => state.id);
+  const setId = useClientStore((state) => state.setId);
   const items = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_CLIENT;
 
