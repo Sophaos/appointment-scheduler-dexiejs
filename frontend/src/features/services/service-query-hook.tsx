@@ -2,6 +2,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { schedulerDatabase } from "db/db";
 import { DEFAULT_SERVICE, Service } from "./service";
 import { useServiceStore } from "./service-store";
+import { toast } from "react-toastify";
 
 export const useServiceQuery = () => {
   const id = useServiceStore((state) => state.id);
@@ -14,30 +15,33 @@ export const useServiceQuery = () => {
   const update = async (item: Service) => {
     try {
       await schedulerDatabase.services.update(item.id, item);
+      toggleDrawer();
+      toast.success("A service has been updated.");
     } catch (error) {
       console.error(error);
-    } finally {
-      toggleDrawer();
+      toast.error("An error has occured.");
     }
   };
 
   const create = async (item: Service) => {
     try {
       await schedulerDatabase.services.add({ ...item, id: undefined });
+      toggleDrawer();
+      toast.success("A service has been created.");
     } catch (error) {
       console.error(error);
-    } finally {
-      toggleDrawer();
+      toast.error("An error has occured.");
     }
   };
 
   const remove = async (id: number) => {
     try {
       await schedulerDatabase.services.delete(id);
+      toggleDrawer();
+      toast.success("A service has been removed.");
     } catch (error) {
       console.error(error);
-    } finally {
-      toggleDrawer();
+      toast.error("An error has occured.");
     }
   };
 
