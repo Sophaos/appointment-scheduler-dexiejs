@@ -5,6 +5,8 @@ import { useClientStore } from "./client-store";
 export const useClientQuery = () => {
   const id = useClientStore((state) => state.id);
   const setId = useClientStore((state) => state.setId);
+  const toggleDrawer = useClientStore((state) => state.toggleClientDrawerVisibility);
+
   const items = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_CLIENT;
 
@@ -13,6 +15,8 @@ export const useClientQuery = () => {
       await schedulerDatabase.clients.update(item.id, item);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -21,6 +25,8 @@ export const useClientQuery = () => {
       await schedulerDatabase.clients.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -29,6 +35,8 @@ export const useClientQuery = () => {
       await schedulerDatabase.clients.delete(id);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
   return {

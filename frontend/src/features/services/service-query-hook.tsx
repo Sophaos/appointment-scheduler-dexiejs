@@ -6,6 +6,8 @@ import { useServiceStore } from "./service-store";
 export const useServiceQuery = () => {
   const id = useServiceStore((state) => state.id);
   const setId = useServiceStore((state) => state.setId);
+  const toggleDrawer = useServiceStore((state) => state.toggleServiceDrawerVisibility);
+
   const items = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_SERVICE;
 
@@ -14,6 +16,8 @@ export const useServiceQuery = () => {
       await schedulerDatabase.services.update(item.id, item);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -22,6 +26,8 @@ export const useServiceQuery = () => {
       await schedulerDatabase.services.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -30,8 +36,11 @@ export const useServiceQuery = () => {
       await schedulerDatabase.services.delete(id);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
+
   return {
     items,
     item,

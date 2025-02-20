@@ -10,27 +10,15 @@ export const ServiceDrawer = () => {
   const handleHide = useServiceStore((state) => state.toggleServiceDrawerVisibility);
 
   const handleUpdate = async (item: Service) => {
-    try {
-      await update(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await update(item);
   };
 
   const handleAdd = async (item: Service) => {
-    try {
-      await create(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await create(item);
   };
 
   const handleDelete = async () => {
-    try {
-      await remove(data!.id);
-    } catch (error) {
-      console.error(error);
-    }
+    await remove(data!.id);
   };
 
   const handleConfirm = (formData: Service) => {

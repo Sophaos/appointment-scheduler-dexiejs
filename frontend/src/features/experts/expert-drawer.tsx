@@ -10,32 +10,20 @@ export const ExpertDrawer = () => {
   const handleHide = useExpertStore((state) => state.toggleExpertDrawerVisibility);
 
   const handleUpdate = async (item: Expert) => {
-    try {
-      await update(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await update(item);
   };
 
   const handleAdd = async (item: Expert) => {
-    try {
-      await create(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await create(item);
+  };
+
+  const handleDelete = async () => {
+    await remove(data!.id);
   };
 
   const handleConfirm = (formData: Expert) => {
     const item = { ...data, ...formData };
     item?.id ? handleUpdate(item) : handleAdd(item);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await remove(data!.id);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (

@@ -10,27 +10,15 @@ export const ClientDrawer = () => {
   const handleHide = useClientStore((state) => state.toggleClientDrawerVisibility);
 
   const handleUpdate = async (item: Client) => {
-    try {
-      await update(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await update(item);
   };
 
   const handleAdd = async (item: Client) => {
-    try {
-      await create(item);
-    } catch (error) {
-      console.error(error);
-    }
+    await create(item);
   };
 
   const handleDelete = async () => {
-    try {
-      await remove(data!.id);
-    } catch (error) {
-      console.error(error);
-    }
+    await remove(data!.id);
   };
 
   const handleConfirm = (formData: Client) => {

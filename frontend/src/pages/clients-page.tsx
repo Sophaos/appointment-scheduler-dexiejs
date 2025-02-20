@@ -1,6 +1,8 @@
 import { Client } from "features/clients/client";
 import { useClientQuery } from "features/clients/client-query-hook";
 import { useClientStore } from "features/clients/client-store";
+import { TableLayout } from "layout/table-layout";
+import { AddButton } from "shared/ui/add-button";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
 
 export const ClientsPage = () => {
@@ -20,5 +22,14 @@ export const ClientsPage = () => {
     toggleClientDrawerVisibility();
   };
 
-  return <BaseTable onEdit={handleEdit} data={items} columns={columns} />;
+  const openDrawer = () => {
+    setId(0);
+    toggleClientDrawerVisibility();
+  };
+
+  return (
+    <TableLayout title="Clients" headerContent={<AddButton onAdd={openDrawer} />}>
+      <BaseTable onEdit={handleEdit} data={items} columns={columns} />
+    </TableLayout>
+  );
 };

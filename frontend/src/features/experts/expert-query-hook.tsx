@@ -5,6 +5,8 @@ import { useExpertStore } from "./expert-store";
 export const useExpertQuery = () => {
   const id = useExpertStore((state) => state.id);
   const setId = useExpertStore((state) => state.setId);
+  const toggleDrawer = useExpertStore((state) => state.toggleExpertDrawerVisibility);
+
   const items = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_EXPERT;
 
@@ -13,6 +15,8 @@ export const useExpertQuery = () => {
       await schedulerDatabase.experts.update(item.id, item);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -21,6 +25,8 @@ export const useExpertQuery = () => {
       await schedulerDatabase.experts.add({ ...item, id: undefined });
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
 
@@ -29,8 +35,11 @@ export const useExpertQuery = () => {
       await schedulerDatabase.experts.delete(id);
     } catch (error) {
       console.error(error);
+    } finally {
+      toggleDrawer();
     }
   };
+
   return {
     items,
     item,
