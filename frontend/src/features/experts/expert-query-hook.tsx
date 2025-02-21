@@ -5,11 +5,13 @@ import { useExpertStore } from "./expert-store";
 import { toast } from "react-toastify";
 export const useExpertQuery = () => {
   const id = useExpertStore((state) => state.id);
+  const resourceId = useExpertStore((state) => state.resourceId);
   const setId = useExpertStore((state) => state.setId);
   const toggleDrawer = useExpertStore((state) => state.toggleExpertDrawerVisibility);
 
   const items = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
   const item = id ? items?.find((i) => i.id === id) : DEFAULT_EXPERT;
+  const resource = resourceId ? items?.find((i) => i.id === resourceId) : undefined;
 
   const update = async (item: Expert) => {
     try {
@@ -47,6 +49,7 @@ export const useExpertQuery = () => {
   return {
     items,
     item,
+    resource,
     setId,
     update,
     create,

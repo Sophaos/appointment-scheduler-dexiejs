@@ -18,6 +18,7 @@ import { useSearchParams } from "react-router-dom";
 import { useCalendarGetter } from "./calendar-getter-hook";
 import { useCalendarFormats } from "./calendar-formats-hook";
 import { useAppointmentStore } from "features/appointments/appointment-store";
+import { useExpertStore } from "features/experts/expert-store";
 
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
@@ -25,7 +26,6 @@ const OUT_OF_BOUND_DURATION = 1440;
 
 export interface BaseCalendarProps {
   events: FormattedAppointment[];
-  // data: Appointment[];
   resources?: Expert[];
 }
 
@@ -33,7 +33,7 @@ export const BaseCalendar = ({ events, resources }: BaseCalendarProps) => {
   const setId = useAppointmentStore((state) => state.setId);
   const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
   const setAppointmentTime = useAppointmentStore((state) => state.setAppointmentTime);
-  const setIsMoving = useAppointmentStore((state) => state.setIsMoving);
+  const setResourceId = useExpertStore((state) => state.setResourceId);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { formats } = useCalendarFormats();
@@ -76,42 +76,36 @@ export const BaseCalendar = ({ events, resources }: BaseCalendarProps) => {
     (event: any) => {
       setId(event.event.id);
       toggleAppointmentDrawerVisibility();
-      setIsMoving(true);
       setAppointmentTime(event.start, event.end);
-      // dispatch(setAppointmentData({ ...selectedEvent, startTime: event.start.toISOString(), duration: getMinutesDifferences(event.start, event.end) }));
     },
-    [setAppointmentTime, setId, setIsMoving, toggleAppointmentDrawerVisibility]
+    [setAppointmentTime, setId, toggleAppointmentDrawerVisibility]
   );
 
   const handleEventDrop = useCallback(
     (e: any) => {
       const { start, end, event, resourceId } = e;
       setId(event.id);
-      setIsMoving(true);
       toggleAppointmentDrawerVisibility();
       setAppointmentTime(start, end);
-      // const resource = resources?.find((item) => item.id === resourceId);
-      // dispatch(setAppointmentData({ ...selectedEvent, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource ?? selectedEvent?.expert }));
+      setResourceId(resourceId);
     },
-    [setAppointmentTime, setId, setIsMoving, toggleAppointmentDrawerVisibility]
+    [setAppointmentTime, setId, setResourceId, toggleAppointmentDrawerVisibility]
   );
 
   const handleSelectSlot = useCallback(
     (event: SlotInfo) => {
       const { start, end, resourceId } = event;
-      // const resource = resources?.find((item) => item.id === resourceId) ?? undefined;
+      setResourceId(Number(resourceId));
       toggleAppointmentDrawerVisibility();
       const duration = getMinutesDifferences(start, end);
       if (duration === OUT_OF_BOUND_DURATION) {
         start.setHours(10);
-        // dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), expert: resource }));
         setAppointmentTime(start, end);
       } else {
-        // dispatch(setAppointmentData({ ...DEFAULT_APPOINTMENT, startTime: start.toISOString(), duration: getMinutesDifferences(start, end), expert: resource }));
         setAppointmentTime(start, end);
       }
     },
-    [setAppointmentTime, toggleAppointmentDrawerVisibility]
+    [setAppointmentTime, setResourceId, toggleAppointmentDrawerVisibility]
   );
 
   const handleSelectEvent = useCallback(

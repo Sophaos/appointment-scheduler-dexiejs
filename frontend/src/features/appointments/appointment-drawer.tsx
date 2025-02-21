@@ -3,27 +3,34 @@ import { AppointmentForm } from "./appointment-form";
 import { Appointment, DEFAULT_APPOINTMENT, FormattedAppointment } from "./appointment";
 import { useAppointmentQuery } from "./appointment-query-hook";
 import { useAppointmentStore } from "./appointment-store";
+import { useExpertQuery } from "features/experts/expert-query-hook";
+import { useExpertStore } from "features/experts/expert-store";
 
 export const AppointmentDrawer = () => {
   const isAppointmentDrawerVisible = useAppointmentStore((state) => state.isAppointmentDrawerVisible);
-  const handleHide = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
+  const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
   const setId = useAppointmentStore((state) => state.setId);
-  const { item: data } = useAppointmentQuery();
-  // const isMoving = useAppointmentStore((state) => state.isMoving);
+  const start = useAppointmentStore((state) => state.start);
+  const duration = useAppointmentStore((state) => state.duration);
+  const setResourceId = useExpertStore((state) => state.setResourceId);
 
-  // const handleHide = () => {
-  //   dispatch(setAppointmentDrawerVisibility(false));
-  //   dispatch(setIsMoving(false));
-  //   dispatch(setAppointmentData(DEFAULT_APPOINTMENT));
-  // };
+  const { resource } = useExpertQuery();
+  const { item: data, update, create, remove } = useAppointmentQuery();
 
-  const { update, create, remove } = useAppointmentQuery();
+  const formattedData: FormattedAppointment = data
+    ? { ...data, start: new Date(start), duration, expert: resource }
+    : { ...DEFAULT_APPOINTMENT, start: new Date(DEFAULT_APPOINTMENT.startTime), duration, expert: resource };
 
-  const formattedData: FormattedAppointment = data ? { ...data, start: new Date(data.startTime) } : { ...DEFAULT_APPOINTMENT, start: new Date(DEFAULT_APPOINTMENT.startTime) };
+  const handleHide = () => {
+    toggleAppointmentDrawerVisibility();
+    setId(0);
+    setResourceId(0);
+  };
 
   const handleUpdate = async (item: Appointment) => {
     try {
       await update(item);
+      handleHide();
     } catch (error) {
       console.error(error);
     }
@@ -32,6 +39,7 @@ export const AppointmentDrawer = () => {
   const handleAdd = async (item: Appointment) => {
     try {
       await create(item);
+      handleHide();
     } catch (error) {
       console.error(error);
     }
@@ -40,6 +48,7 @@ export const AppointmentDrawer = () => {
   const handleDelete = async () => {
     try {
       await remove(data!.id);
+      handleHide();
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +57,6 @@ export const AppointmentDrawer = () => {
   const handleConfirm = (formData: FormattedAppointment) => {
     const item: Appointment = { ...data, ...formData, startTime: formData.start.toISOString() };
     item?.id ? handleUpdate(item) : handleAdd(item);
-    setId(0);
   };
 
   return (

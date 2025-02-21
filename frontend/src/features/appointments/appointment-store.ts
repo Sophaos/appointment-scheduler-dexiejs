@@ -6,9 +6,7 @@ interface AppointmentState {
   isAppointmentDrawerVisible: boolean;
   start: string;
   duration: number;
-  isMoving: boolean;
   setId: (id: number) => void;
-  setIsMoving: (isMoving: boolean) => void;
   setStart: (date: Date) => void;
   setDuration: (duration: number) => void;
   setAppointmentDrawerVisibility: (isVisible: boolean) => void;
@@ -21,9 +19,7 @@ export const useAppointmentStore = create<AppointmentState>()((set) => ({
   isAppointmentDrawerVisible: false,
   start: "",
   duration: 30,
-  isMoving: false,
   setId: (number) => set({ id: number }),
-  setIsMoving: (isMoving) => set({ isMoving }),
   setStart: (date) => set({ start: date.toISOString() }),
   setDuration: (duration) => set({ duration }),
   setAppointmentTime: (start, end) => set({ start: start.toISOString(), duration: getMinutesDifferences(start, end) }),

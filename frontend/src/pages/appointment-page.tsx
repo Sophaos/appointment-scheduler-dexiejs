@@ -3,12 +3,12 @@ import { useAppointmentQuery } from "features/appointments/appointment-query-hoo
 import { BaseCalendar } from "features/calendar/base-calendar";
 import { useMemo } from "react";
 import { getEndtime } from "shared/utils/time-utils";
+import { useCalendarStore } from "store/calendar-store";
 
 export const AppointmentsPage = () => {
   const { items: appointmentsData } = useAppointmentQuery();
-
-  // const displayedResources = useSelector(selectDisplayedResources);
-
+  const resources = useCalendarStore((state) => state.resources) ?? [];
+  const displayedResources = resources?.length > 0 ? resources : undefined;
   const formatedAppointments: FormattedAppointment[] = useMemo(
     () =>
       appointmentsData?.map((a) => ({
@@ -19,5 +19,5 @@ export const AppointmentsPage = () => {
     [appointmentsData]
   );
 
-  return <BaseCalendar events={formatedAppointments} resources={undefined} />;
+  return <BaseCalendar events={formatedAppointments} resources={displayedResources} />;
 };

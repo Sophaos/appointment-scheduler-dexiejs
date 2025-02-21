@@ -12,9 +12,7 @@ export const useAppointmentQuery = () => {
   const items = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
   const toggleDrawer = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
 
-  const start = useAppointmentStore((state) => state.start);
-  const duration = useAppointmentStore((state) => state.duration);
-  const item = useMemo(() => (id ? items?.find((i) => i.id === id) : { ...DEFAULT_APPOINTMENT, startTime: start, duration }), [duration, id, items, start]);
+  const item = useMemo(() => (id ? items?.find((i) => i.id === id) : DEFAULT_APPOINTMENT), [id, items]);
 
   const update = async (item: Appointment) => {
     try {
