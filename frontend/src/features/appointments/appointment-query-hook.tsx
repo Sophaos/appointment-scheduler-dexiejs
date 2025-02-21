@@ -1,18 +1,20 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { schedulerDatabase } from "db/db";
-import { Appointment } from "./appointment";
+import { Appointment, DEFAULT_APPOINTMENT } from "./appointment";
 import { toast } from "react-toastify";
 import { useAppointmentStore } from "./appointment-store";
+import { useRouter } from "hooks/router-hook";
+import { useMemo } from "react";
 
-interface AppointmentQueryProps {
-  view: string;
-  date: string;
-}
-
-export const useAppointmentQuery = ({ view, date }: AppointmentQueryProps) => {
+export const useAppointmentQuery = () => {
+  const { view, date } = useRouter();
   const id = useAppointmentStore((state) => state.id);
-  const data = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
+  const items = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
   const toggleDrawer = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
+
+  const start = useAppointmentStore((state) => state.start);
+  const duration = useAppointmentStore((state) => state.duration);
+  const item = useMemo(() => (id ? items?.find((i) => i.id === id) : { ...DEFAULT_APPOINTMENT, startTime: start, duration }), [duration, id, items, start]);
 
   const update = async (item: Appointment) => {
     try {
@@ -48,7 +50,8 @@ export const useAppointmentQuery = ({ view, date }: AppointmentQueryProps) => {
   };
   return {
     id,
-    data,
+    items,
+    item,
     update,
     create,
     remove,

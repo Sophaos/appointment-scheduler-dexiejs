@@ -13,7 +13,7 @@ const schedulerDatabase = new Dexie("SchedulerDatabase") as Dexie & {
 };
 
 schedulerDatabase.version(1).stores({
-  friends: "++id",
+  appointments: "++id",
   clients: "++id",
   services: "++id",
   experts: "++id",

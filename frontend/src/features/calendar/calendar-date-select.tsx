@@ -13,5 +13,5 @@ export const CalendarDateSelect = () => {
     setSearchParams({ view, date: getFormattedDate(event.value ?? new Date()) });
   };
 
-  return <Calendar value={formattedCalendarDate} showIcon dateFormat="DD dd, MM, yy" onChange={handleDateChange} />;
+  return <Calendar value={formattedCalendarDate} showIcon dateFormat="D dd, MM, yy" onChange={handleDateChange} />;
 };

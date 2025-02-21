@@ -5,11 +5,14 @@ import { ViewSelect } from "./view-select";
 import { Button } from "primereact/button";
 import { CalendarDateSelect } from "./calendar-date-select";
 import { ResourceSelect } from "./resource-select";
-import { AddButton } from "./add-button";
 import { useSearchParams } from "react-router-dom";
+import { useAppointmentStore } from "features/appointments/appointment-store";
+import { AddButton } from "shared/ui/add-button";
 
 export const CalendarToolbar = ({ onView, onNavigate }: { onView: any; onNavigate: any }) => {
   const [searchParams] = useSearchParams();
+  const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
+
   const view = searchParams.get("view") || "day";
   const goToBack = () => onNavigate(navigate.PREVIOUS);
   const goToNext = () => onNavigate(navigate.NEXT);
@@ -28,6 +31,7 @@ export const CalendarToolbar = ({ onView, onNavigate }: { onView: any; onNavigat
           <Button size="small" id="next-btn-icon" onClick={goToNext} icon="pi pi-chevron-right" />
         </div>
         <div className="flex flex-row flex-wrap gap-3">
+          <AddButton onAdd={toggleAppointmentDrawerVisibility} />
           {(view === "day" || view === "week") && <ResourceSelect />}
           <ViewSelect onView={changeView} />
         </div>

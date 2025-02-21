@@ -1,13 +1,11 @@
 import { FormattedAppointment } from "features/appointments/appointment";
 import { useAppointmentQuery } from "features/appointments/appointment-query-hook";
 import { BaseCalendar } from "features/calendar/base-calendar";
-import { useRouter } from "hooks/router-hook";
 import { useMemo } from "react";
 import { getEndtime } from "shared/utils/time-utils";
 
 export const AppointmentsPage = () => {
-  const { view, date } = useRouter();
-  const { data: appointmentsData } = useAppointmentQuery({ view, date });
+  const { items: appointmentsData } = useAppointmentQuery();
 
   // const displayedResources = useSelector(selectDisplayedResources);
 
@@ -21,5 +19,5 @@ export const AppointmentsPage = () => {
     [appointmentsData]
   );
 
-  return <BaseCalendar data={appointmentsData ?? []} events={formatedAppointments} resources={undefined} />;
+  return <BaseCalendar events={formatedAppointments} resources={undefined} />;
 };
