@@ -3,6 +3,7 @@ import { schedulerDatabase } from "db/db";
 import { DEFAULT_EXPERT, Expert } from "./expert";
 import { useExpertStore } from "./expert-store";
 import { toast } from "react-toastify";
+import { generateExperts } from "./expert-seeder";
 export const useExpertQuery = () => {
   const id = useExpertStore((state) => state.id);
   const resourceId = useExpertStore((state) => state.resourceId);
@@ -46,6 +47,19 @@ export const useExpertQuery = () => {
     }
   };
 
+  const createBatch = async (count: number = 10) => {
+    try {
+      const experts = generateExperts(count);
+      experts.forEach(async (e) => {
+        await schedulerDatabase.experts.add({ ...e, id: undefined });
+      });
+      toast.success("A list of expert has been generated.");
+    } catch (error) {
+      console.error(error);
+      toast.error("An error has occured.");
+    }
+  };
+
   return {
     items,
     item,
@@ -54,5 +68,6 @@ export const useExpertQuery = () => {
     update,
     create,
     remove,
+    createBatch,
   };
 };

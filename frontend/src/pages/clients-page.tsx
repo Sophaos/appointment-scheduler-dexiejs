@@ -4,9 +4,11 @@ import { useClientStore } from "features/clients/client-store";
 import { TableLayout } from "layout/table-layout";
 import { AddButton } from "shared/ui/add-button";
 import { BaseTable, TableColumnProp } from "shared/ui/base-table";
+import { GenerateButton } from "shared/ui/generate-button";
+import { HeaderItems } from "shared/ui/header-items";
 
 export const ClientsPage = () => {
-  const { items, setId } = useClientQuery();
+  const { items, setId, createBatch } = useClientQuery();
   const toggleClientDrawerVisibility = useClientStore((state) => state.toggleClientDrawerVisibility);
 
   const columns: TableColumnProp[] = [
@@ -27,8 +29,20 @@ export const ClientsPage = () => {
     toggleClientDrawerVisibility();
   };
 
+  const handleGenerate = () => {
+    createBatch(10);
+  };
+
   return (
-    <TableLayout title="Clients" headerContent={<AddButton onAdd={openDrawer} />}>
+    <TableLayout
+      title="Clients"
+      headerContent={
+        <HeaderItems>
+          <GenerateButton onGenerate={handleGenerate} />
+          <AddButton onAdd={openDrawer} />
+        </HeaderItems>
+      }
+    >
       <BaseTable onEdit={handleEdit} data={items} columns={columns} />
     </TableLayout>
   );

@@ -3,6 +3,7 @@ import { schedulerDatabase } from "db/db";
 import { DEFAULT_SERVICE, Service } from "./service";
 import { useServiceStore } from "./service-store";
 import { toast } from "react-toastify";
+import { generateServices } from "./service-seeder";
 
 export const useServiceQuery = () => {
   const id = useServiceStore((state) => state.id);
@@ -45,6 +46,19 @@ export const useServiceQuery = () => {
     }
   };
 
+  const createBatch = async (count: number = 10) => {
+    try {
+      const services = generateServices(count);
+      services.forEach(async (e) => {
+        await schedulerDatabase.services.add({ ...e, id: undefined });
+      });
+      toast.success("A list of services has been generated.");
+    } catch (error) {
+      console.error(error);
+      toast.error("An error has occured.");
+    }
+  };
+
   return {
     items,
     item,
@@ -52,5 +66,6 @@ export const useServiceQuery = () => {
     update,
     create,
     remove,
+    createBatch,
   };
 };

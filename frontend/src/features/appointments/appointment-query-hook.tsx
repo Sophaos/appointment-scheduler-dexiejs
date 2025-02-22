@@ -5,11 +5,16 @@ import { toast } from "react-toastify";
 import { useAppointmentStore } from "./appointment-store";
 import { useRouter } from "hooks/router-hook";
 import { useMemo } from "react";
+import { generateAppointments } from "./appointment-seeder";
 
 export const useAppointmentQuery = () => {
   const { view, date } = useRouter();
   const id = useAppointmentStore((state) => state.id);
   const items = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
+  const experts = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
+  const clients = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
+  const services = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
+
   const toggleDrawer = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
 
   const item = useMemo(() => (id ? items?.find((i) => i.id === id) : DEFAULT_APPOINTMENT), [id, items]);
@@ -46,6 +51,21 @@ export const useAppointmentQuery = () => {
       toast.error("An error has occured.");
     }
   };
+
+  const createBatch = async (count: number = 10) => {
+    try {
+      const appointments = generateAppointments(count, clients, services, experts);
+      console.log(appointments);
+      appointments.forEach(async (e) => {
+        await schedulerDatabase.appointments.add({ ...e, id: undefined });
+      });
+      toast.success("A list of appointments has been generated.");
+    } catch (error) {
+      console.error(error);
+      toast.error("An error has occured.");
+    }
+  };
+
   return {
     id,
     items,
@@ -53,5 +73,6 @@ export const useAppointmentQuery = () => {
     update,
     create,
     remove,
+    createBatch,
   };
 };

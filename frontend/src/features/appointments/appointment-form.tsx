@@ -4,7 +4,6 @@ import { BaseFormProps } from "shared/types/base-form-props";
 import { FormattedAppointment } from "./appointment";
 import { FormActions } from "shared/ui/form-actions";
 import { DropdownChangeEvent } from "primereact/dropdown";
-import { EntityOption } from "shared/types/entity-option";
 import { FormInputText } from "shared/ui/form-input-text";
 import { FormSelectButton } from "shared/ui/form-select-button";
 import { FormCalendar } from "shared/ui/form-calendar";
@@ -14,14 +13,7 @@ import { AppointmentSchema } from "./appointment-schema";
 import { useClientQuery } from "features/clients/client-query-hook";
 import { useExpertQuery } from "features/experts/expert-query-hook";
 import { useServiceQuery } from "features/services/service-query-hook";
-
-const STATUS_OPTIONS: EntityOption[] = [
-  { id: "IDLE", label: "Idle" },
-  { id: "ARRIVED", label: "Arrived" },
-  { id: "IN_PROGRESS", label: "In Progress" },
-  { id: "DONE", label: "Done" },
-  { id: "NO_SHOW", label: "No-show" },
-];
+import { STATUS_OPTIONS } from "./appointment-status";
 
 export const AppointmentForm = ({ onCancel, onConfirm, data, isProcessing, isEnabled, onDelete }: BaseFormProps<FormattedAppointment>) => {
   const {

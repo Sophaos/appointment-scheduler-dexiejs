@@ -8,16 +8,24 @@ import { ResourceSelect } from "./resource-select";
 import { useSearchParams } from "react-router-dom";
 import { useAppointmentStore } from "features/appointments/appointment-store";
 import { AddButton } from "shared/ui/add-button";
+import { HeaderItems } from "shared/ui/header-items";
+import { GenerateButton } from "shared/ui/generate-button";
+import { useAppointmentQuery } from "features/appointments/appointment-query-hook";
 
 export const CalendarToolbar = ({ onView, onNavigate }: { onView: any; onNavigate: any }) => {
   const [searchParams] = useSearchParams();
   const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
+  const { createBatch } = useAppointmentQuery();
 
   const view = searchParams.get("view") || "day";
   const goToBack = () => onNavigate(navigate.PREVIOUS);
   const goToNext = () => onNavigate(navigate.NEXT);
   const goToToday = () => onNavigate(navigate.TODAY);
   const changeView = (view: View) => onView(view);
+
+  const handleGenerate = () => {
+    createBatch(10);
+  };
 
   return (
     <>
@@ -31,7 +39,10 @@ export const CalendarToolbar = ({ onView, onNavigate }: { onView: any; onNavigat
           <Button size="small" id="next-btn-icon" onClick={goToNext} icon="pi pi-chevron-right" />
         </div>
         <div className="flex flex-row flex-wrap gap-3">
-          <AddButton onAdd={toggleAppointmentDrawerVisibility} />
+          <HeaderItems>
+            <GenerateButton onGenerate={handleGenerate} />
+            <AddButton onAdd={toggleAppointmentDrawerVisibility} />
+          </HeaderItems>
           {(view === "day" || view === "week") && <ResourceSelect />}
           <ViewSelect onView={changeView} />
         </div>

@@ -47,7 +47,7 @@ export const AddSpeedDial = () => {
   ];
 
   return (
-    <div className="fixed bottom-5 right-5">
+    <div className="fixed bottom-1 right-3">
       <Toast ref={toast} />
       <Tooltip target=".speeddial-bottom-right .p-speeddial-action" position="left" />
       <SpeedDial model={items} direction="up" className="speeddial-bottom-right right-5 bottom-5" buttonClassName="p-button-danger" />

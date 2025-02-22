@@ -3,6 +3,7 @@ import { schedulerDatabase } from "db/db";
 import { Client, DEFAULT_CLIENT } from "./client";
 import { useClientStore } from "./client-store";
 import { toast } from "react-toastify";
+import { generateClients } from "./client-seeder";
 export const useClientQuery = () => {
   const id = useClientStore((state) => state.id);
   const setId = useClientStore((state) => state.setId);
@@ -40,6 +41,20 @@ export const useClientQuery = () => {
       console.error(error);
     }
   };
+
+  const createBatch = async (count: number = 10) => {
+    try {
+      const clients = generateClients(count);
+      clients.forEach(async (e) => {
+        await schedulerDatabase.clients.add({ ...e, id: undefined });
+      });
+      toast.success("A list of clients has been generated.");
+    } catch (error) {
+      console.error(error);
+      toast.error("An error has occured.");
+    }
+  };
+
   return {
     items,
     item,
@@ -47,5 +62,6 @@ export const useClientQuery = () => {
     update,
     create,
     remove,
+    createBatch,
   };
 };
