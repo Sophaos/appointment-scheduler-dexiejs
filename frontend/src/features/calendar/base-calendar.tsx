@@ -33,6 +33,7 @@ export const BaseCalendar = ({ events, resources }: BaseCalendarProps) => {
   const setId = useAppointmentStore((state) => state.setId);
   const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
   const setAppointmentTime = useAppointmentStore((state) => state.setAppointmentTime);
+
   const setResourceId = useExpertStore((state) => state.setResourceId);
 
   const [searchParams, setSearchParams] = useSearchParams();

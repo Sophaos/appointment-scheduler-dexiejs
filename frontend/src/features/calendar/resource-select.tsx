@@ -10,5 +10,5 @@ export const ResourceSelect = () => {
   const handleChange = (event: MultiSelectChangeEvent) => {
     setResources(event.target.value);
   };
-  return <MultiSelect value={resources} onChange={handleChange} optionLabel="nickname" placeholder="Resource(s)" options={resourcesOptions} />;
+  return <MultiSelect className="max-w-80" value={resources} onChange={handleChange} optionLabel="nickname" placeholder="Resource(s)" options={resourcesOptions} />;
 };

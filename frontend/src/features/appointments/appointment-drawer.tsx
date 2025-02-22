@@ -5,6 +5,7 @@ import { useAppointmentQuery } from "./appointment-query-hook";
 import { useAppointmentStore } from "./appointment-store";
 import { useExpertQuery } from "features/experts/expert-query-hook";
 import { useExpertStore } from "features/experts/expert-store";
+import { useMemo } from "react";
 
 export const AppointmentDrawer = () => {
   const isAppointmentDrawerVisible = useAppointmentStore((state) => state.isAppointmentDrawerVisible);
@@ -14,12 +15,28 @@ export const AppointmentDrawer = () => {
   const duration = useAppointmentStore((state) => state.duration);
   const setResourceId = useExpertStore((state) => state.setResourceId);
 
-  const { resource } = useExpertQuery();
+  const { item: expert, resource } = useExpertQuery();
   const { item: data, update, create, remove } = useAppointmentQuery();
 
-  const formattedData: FormattedAppointment = data
-    ? { ...data, start: new Date(start), duration, expert: resource }
-    : { ...DEFAULT_APPOINTMENT, start: new Date(DEFAULT_APPOINTMENT.startTime), duration, expert: resource };
+  const formattedData: FormattedAppointment = useMemo(
+    () =>
+      data
+        ? {
+            ...data,
+            start: new Date(start),
+            duration,
+            expert: resource ?? data?.expert,
+          }
+        : {
+            ...DEFAULT_APPOINTMENT,
+            start: new Date(DEFAULT_APPOINTMENT.startTime),
+            duration,
+            expert: resource,
+          },
+    [data, duration, resource, start]
+  );
+
+  console.log(formattedData, expert);
 
   const handleHide = () => {
     toggleAppointmentDrawerVisibility();

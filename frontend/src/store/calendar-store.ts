@@ -8,5 +8,6 @@ interface CalendarState {
 
 export const useCalendarStore = create<CalendarState>()((set) => ({
   resources: [],
+  isMoving: false,
   setResources: (resources) => set({ resources }),
 }));

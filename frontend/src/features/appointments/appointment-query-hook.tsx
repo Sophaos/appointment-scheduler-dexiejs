@@ -15,15 +15,12 @@ export const useAppointmentQuery = () => {
   const clients = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
   const services = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
 
-  const toggleDrawer = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
-
   const item = useMemo(() => (id ? items?.find((i) => i.id === id) : DEFAULT_APPOINTMENT), [id, items]);
 
   const update = async (item: Appointment) => {
     try {
       await schedulerDatabase.appointments.update(item.id, item);
       toast.success("An appointment has been updated.");
-      toggleDrawer();
     } catch (error) {
       console.error(error);
       toast.error("An error has occured.");
@@ -34,7 +31,6 @@ export const useAppointmentQuery = () => {
     try {
       await schedulerDatabase.appointments.add({ ...item, id: undefined });
       toast.success("An appointment has been updated.");
-      toggleDrawer();
     } catch (error) {
       console.error(error);
       toast.error("An error has occured.");
@@ -45,7 +41,6 @@ export const useAppointmentQuery = () => {
     try {
       await schedulerDatabase.appointments.delete(id);
       toast.success("An appointment has been updated.");
-      toggleDrawer();
     } catch (error) {
       console.error(error);
       toast.error("An error has occured.");
