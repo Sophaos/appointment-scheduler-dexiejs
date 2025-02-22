@@ -33,7 +33,6 @@ export const BaseCalendar = ({ events, resources }: BaseCalendarProps) => {
   const setId = useAppointmentStore((state) => state.setId);
   const toggleAppointmentDrawerVisibility = useAppointmentStore((state) => state.toggleAppointmentDrawerVisibility);
   const setAppointmentTime = useAppointmentStore((state) => state.setAppointmentTime);
-
   const setResourceId = useExpertStore((state) => state.setResourceId);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -112,9 +111,10 @@ export const BaseCalendar = ({ events, resources }: BaseCalendarProps) => {
   const handleSelectEvent = useCallback(
     (event: any) => {
       setId(event.id);
+      setAppointmentTime(event.start, event.end);
       toggleAppointmentDrawerVisibility();
     },
-    [setId, toggleAppointmentDrawerVisibility]
+    [setAppointmentTime, setId, toggleAppointmentDrawerVisibility]
   );
 
   const min = useMemo(() => new Date(1972, 0, 1, 9, 0, 0, 0), []);

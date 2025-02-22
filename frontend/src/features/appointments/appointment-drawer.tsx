@@ -15,7 +15,7 @@ export const AppointmentDrawer = () => {
   const duration = useAppointmentStore((state) => state.duration);
   const setResourceId = useExpertStore((state) => state.setResourceId);
 
-  const { item: expert, resource } = useExpertQuery();
+  const { resource } = useExpertQuery();
   const { item: data, update, create, remove } = useAppointmentQuery();
 
   const formattedData: FormattedAppointment = useMemo(
@@ -35,8 +35,6 @@ export const AppointmentDrawer = () => {
           },
     [data, duration, resource, start]
   );
-
-  console.log(formattedData, expert);
 
   const handleHide = () => {
     toggleAppointmentDrawerVisibility();

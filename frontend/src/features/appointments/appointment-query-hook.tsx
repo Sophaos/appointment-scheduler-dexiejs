@@ -50,7 +50,6 @@ export const useAppointmentQuery = () => {
   const createBatch = async (count: number = 10) => {
     try {
       const appointments = generateAppointments(count, clients, services, experts);
-      console.log(appointments);
       appointments.forEach(async (e) => {
         await schedulerDatabase.appointments.add({ ...e, id: undefined });
       });
