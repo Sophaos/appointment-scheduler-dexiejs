@@ -14,9 +14,6 @@ export const useAppointmentQuery = () => {
   const { view, date } = useRouter();
   const id = useAppointmentStore((state) => state.id);
   const items = useLiveQuery(() => schedulerDatabase.appointments?.toArray(), [view, date]);
-  const experts = useLiveQuery(() => schedulerDatabase.experts?.toArray()) ?? [];
-  const clients = useLiveQuery(() => schedulerDatabase.clients?.toArray()) ?? [];
-  const services = useLiveQuery(() => schedulerDatabase.services?.toArray()) ?? [];
 
   const item = useMemo(() => (id ? items?.find((i) => i.id === id) : DEFAULT_APPOINTMENT), [id, items]);
 
@@ -53,24 +50,21 @@ export const useAppointmentQuery = () => {
   const createBatch = async (count: number = 10) => {
     try {
       const generatedExperts = generateExperts(count);
-      generatedExperts.forEach(async (e) => {
-        await schedulerDatabase.experts.add({ ...e, id: undefined });
-      });
+      await Promise.all(generatedExperts.map((e) => schedulerDatabase.experts.add({ ...e, id: undefined })));
 
       const generatedClients = generateClients(count);
-      generatedClients.forEach(async (e) => {
-        await schedulerDatabase.clients.add({ ...e, id: undefined });
-      });
+      await Promise.all(generatedClients.map((c) => schedulerDatabase.clients.add({ ...c, id: undefined })));
 
       const generatedServices = generateServices(count);
-      generatedServices.forEach(async (e) => {
-        await schedulerDatabase.services.add({ ...e, id: undefined });
-      });
+      await Promise.all(generatedServices.map((s) => schedulerDatabase.services.add({ ...s, id: undefined })));
 
-      const appointments = generateAppointments(count, generatedClients, generatedServices, generatedExperts);
-      appointments.forEach(async (e) => {
-        await schedulerDatabase.appointments.add({ ...e, id: undefined });
-      });
+      // Fetch newly inserted data
+      const experts = await schedulerDatabase.experts.toArray();
+      const clients = await schedulerDatabase.clients.toArray();
+      const services = await schedulerDatabase.services.toArray();
+
+      const appointments = generateAppointments(count, clients, services, experts);
+      await Promise.all(appointments.map((a) => schedulerDatabase.appointments.add({ ...a, id: undefined })));
       toast.success("A list of appointments has been generated.");
     } catch (error) {
       console.error(error);

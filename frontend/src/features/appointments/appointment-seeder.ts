@@ -31,8 +31,8 @@ const appointmentSeeder = ({ clients, services, experts }: AppointmentSeederProp
 
 const getRandomDateBetween10AMTo5PM = () => {
   const today = new Date();
-  const minHour = 10;
-  const maxHour = 16;
+  const minHour = 9;
+  const maxHour = 20;
 
   const randomHour = Math.floor(Math.random() * (maxHour - minHour + 1)) + minHour;
   const minuteIntervals = [0, 15, 30, 45];
