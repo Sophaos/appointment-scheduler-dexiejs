@@ -7,10 +7,9 @@ A web app for scheduling appointments between clients and service experts. The a
   <img src="https://github.com/Sophaos/appointment-scheduler/assets/54873061/d105e700-fd4d-490f-b6ba-5d601d1ef985" width="45%">
 </p>
 
-
 ## Motivation
 
-I was motivated to practice React with TypeScript for the front end and to learn NestJS for the back end. The goal was to create an application similar to [Fresha](https://www.fresha.com/) with some of its features.
+I was motivated to practice React with TypeScript for the front end and to learn Dexie.js and Zustand. The goal was to create an application similar to [Fresha](https://www.fresha.com/) with some of its features.
 
 ## Features
 
@@ -22,14 +21,10 @@ I was motivated to practice React with TypeScript for the front end and to learn
 
 ## What I've used / learned
 
+- Dexie.js
 - React
 - TypeScript
-- Redux Toolkit
-- Redux Toolkit Query
 - react-big-calendar
-- NestJS
-- TypeORM
-- PostgreSQL
 - react-hook-form
 - zod validation
 - TailwindCSS
@@ -39,4 +34,4 @@ I was motivated to practice React with TypeScript for the front end and to learn
 
 ## How to run
 
-Run the following command: `docker compose up`
+Run the following command: `docker compose up` and navigate to http://localhost:5173/
