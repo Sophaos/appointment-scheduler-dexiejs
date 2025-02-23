@@ -3,7 +3,7 @@
 A web app for scheduling appointments between clients and service experts. The appointments are displayed in an interactive calendar.
 
 <p align="center">
-  <img src="https://github.com/Sophaos/appointment-scheduler/assets/54873061/dbabb978-319e-4a7c-804f-9e298f5fb8d4" width="45%">
+  <img src="https://github.com/user-attachments/assets/4d260446-9359-4398-858c-ae93f26ad309" width="45%">
   <img src="https://github.com/Sophaos/appointment-scheduler/assets/54873061/d105e700-fd4d-490f-b6ba-5d601d1ef985" width="45%">
 </p>
 
