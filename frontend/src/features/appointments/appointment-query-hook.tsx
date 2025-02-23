@@ -6,6 +6,9 @@ import { useAppointmentStore } from "./appointment-store";
 import { useRouter } from "hooks/router-hook";
 import { useMemo } from "react";
 import { generateAppointments } from "./appointment-seeder";
+import { generateExperts } from "features/experts/expert-seeder";
+import { generateClients } from "features/clients/client-seeder";
+import { generateServices } from "features/services/service-seeder";
 
 export const useAppointmentQuery = () => {
   const { view, date } = useRouter();
@@ -49,7 +52,22 @@ export const useAppointmentQuery = () => {
 
   const createBatch = async (count: number = 10) => {
     try {
-      const appointments = generateAppointments(count, clients, services, experts);
+      const generatedExperts = generateExperts(count);
+      generatedExperts.forEach(async (e) => {
+        await schedulerDatabase.experts.add({ ...e, id: undefined });
+      });
+
+      const generatedClients = generateClients(count);
+      generatedClients.forEach(async (e) => {
+        await schedulerDatabase.clients.add({ ...e, id: undefined });
+      });
+
+      const generatedServices = generateServices(count);
+      generatedServices.forEach(async (e) => {
+        await schedulerDatabase.services.add({ ...e, id: undefined });
+      });
+
+      const appointments = generateAppointments(count, generatedClients, generatedServices, generatedExperts);
       appointments.forEach(async (e) => {
         await schedulerDatabase.appointments.add({ ...e, id: undefined });
       });
