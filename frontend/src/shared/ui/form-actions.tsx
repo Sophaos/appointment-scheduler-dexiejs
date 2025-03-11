@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { BaseBackdrop } from "./base-backdrop";
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
 
 interface FormActionsProps {
   onCancel: () => void;
@@ -24,7 +24,6 @@ export const FormActions = ({ onCancel, handleDelete, isEnabled = false, hasId, 
   };
   return (
     <div className="flex justify-between gap-3 mb-10">
-      <ConfirmDialog />
       <Button type="button" outlined onClick={onCancel} label="Discard change" />
       <div className="flex gap-1">
         {handleDelete && hasId && <Button type="button" severity="danger" onClick={onDelete} label="Delete" />}

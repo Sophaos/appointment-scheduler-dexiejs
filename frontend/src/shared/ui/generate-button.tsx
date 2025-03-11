@@ -8,7 +8,7 @@ interface GenerateButtonProps {
 export const GenerateButton = ({ onGenerate }: GenerateButtonProps) => {
   const confirm = () => {
     confirmDialog({
-      message: "Do you want to genrate some random data  ?",
+      message: "Do you want to generate some random data  ?",
       header: "Generate Data Confirmation",
       icon: "pi pi-info-circle",
       defaultFocus: "reject",
